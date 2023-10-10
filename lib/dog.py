@@ -1,22 +1,32 @@
-from models import Dog
+# lib/dog.py
 
-def create_table(base):
-    pass
+from lib.models import Dog
 
-def save(session, dog):
-    pass
+def create_table():
+    # Create the database table if it doesn't exist
+    Base.metadata.create_all(engine)
 
-def get_all(session):
-    pass
+def create_dog(name, breed):
+    # Create a new dog record in the database
+    new_dog = Dog(name=name, breed=breed)
+    session.add(new_dog)
+    session.commit()
 
-def find_by_name(session, name):
-    pass
+def read_dog(name):
+    # Retrieve a dog record by its name
+    return session.query(Dog).filter_by(name=name).first()
 
-def find_by_id(session, id):
-    pass
+def update_dog(name, new_name, new_breed):
+    # Update a dog's name and breed
+    dog = session.query(Dog).filter_by(name=name).first()
+    if dog:
+        dog.name = new_name
+        dog.breed = new_breed
+        session.commit()
 
-def find_by_name_and_breed(session, name, breed):
-    pass
-
-def update_breed(session, dog, breed):
-    pass
+def delete_dog(name):
+    # Delete a dog record by its name
+    dog = session.query(Dog).filter_by(name=name).first()
+    if dog:
+        session.delete(dog)
+        session.commit()
